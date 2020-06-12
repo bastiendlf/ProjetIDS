@@ -26,9 +26,9 @@ for e in columns:
 print("Old data frame length:", len(data))
 print("New data frame length:", len(df))
 print("Number of rows deleted: ", (len(data) - len(df)))
-print("We removed ", ((len(data) - len(df)) / len(data)), "% of total values amount.")
+print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
 test = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
-# plt.show()
+plt.show()
 
 print("Hello IDS project")
