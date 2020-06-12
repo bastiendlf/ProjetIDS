@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.stats import zscore
@@ -21,7 +20,7 @@ df = data[filtered_entries]
 
 for e in columns:
     df.boxplot(column=e)
-    plt.show()
+    # plt.show()
 
 print("Old data frame length:", len(data))
 print("New data frame length:", len(df))
@@ -29,6 +28,8 @@ print("Number of rows deleted: ", (len(data) - len(df)))
 print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
 test = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
-plt.show()
+# plt.show()
 
+correlation = df.corr(method='pearson')
+print(correlation)
 print("Hello IDS project")
