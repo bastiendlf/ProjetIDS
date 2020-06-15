@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import zscore
-
 import matplotlib.pyplot as plt
 
 data = pd.read_csv('red_wines.csv')
@@ -30,16 +29,16 @@ print("Number of rows deleted: ", (len(data) - len(df)))
 print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
 test = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
-# plt.show()
+plt.show()
 
 correlation = df.corr(method='pearson')
 # print(correlation)
 
-# repartition des données dans chaque classe : bon ou mauvais
+# distribution of data in each class: good or bad
 print("")
-good_class = df.loc[df['quality'] == 1].shape[0]  # nombre de vins marqués bons
-bad_class = df.loc[df['quality'] == -1].shape[0]  # nombre de vins marqués mauvais
-print("Proportion/repartition des données filtrées : \n", good_class / len(df) * 100,"% <- proportion de bons vins\n",
-       bad_class / len(df) * 100, "% <- proportion de mauvais vins\n")
+good_wines = df.loc[df['quality'] == 1].shape[0]
+bad_wines = df.loc[df['quality'] == -1].shape[0]
+print("Proportion of filtered data \n", "Good wines:", good_wines / len(df) * 100, "%\n",
+      "Bad wines:", bad_wines / len(df) * 100, "%\n")
 
 print("Hello IDS project")
