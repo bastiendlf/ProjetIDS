@@ -3,8 +3,9 @@ import pandas as pd
 from scipy.stats import zscore
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
-from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
 
 data = pd.read_csv('red_wines.csv')
 columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
@@ -46,15 +47,23 @@ print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 
 # center and reduce
 center_df = pd.DataFrame(preprocessing.scale(df, with_mean='True', with_std='True'), columns=columns)
 
-# separate data in groups : cross validation 1/5 (20% test and 80% training) : https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
-# kf = KFold(n_splits = 5) # dataframe separated in 5 folds
-# df_train = pd.DataFrame
-# df_test = pd.DataFrame
-# for train_index, test_index, in kf.split(center_df) :
-#     print("Train :", train_index, "Test :", test_index)
+# split dataset in features and target variable
+feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
+                'free sulfur dioxide',
+                'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']
 
-df_train, df_test = train_test_split(center_df, test_size=0.25, random_state=0)
+X = center_df[feature_cols]  # Features
+y = center_df.quality  # Target variable
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
 
+# instantiate the Logistic Regression model
+logistic_regression = LogisticRegression()
+
+logistic_regression.fit(X_train, y_train)
+
+y_pred = logistic_regression.predict(X_test)
+
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
 
 print("Hello IDS project")
