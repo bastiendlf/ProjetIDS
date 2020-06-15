@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import zscore
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
 
 data = pd.read_csv('red_wines.csv')
 columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
@@ -29,7 +30,7 @@ print("Number of rows deleted: ", (len(data) - len(df)))
 print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
 scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
-plt.show()
+# plt.show()
 
 correlation = df.corr(method='pearson')
 # print(correlation)
@@ -39,5 +40,8 @@ good_wines = df.loc[df['quality'] == 1].shape[0]
 bad_wines = df.loc[df['quality'] == -1].shape[0]
 print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 100, "%\n",
       "Bad wines:", bad_wines / len(df) * 100, "%\n")
+
+# center and reduce
+center_df = pd.DataFrame(preprocessing.scale(df, with_mean='True', with_std='True'), columns=columns)
 
 print("Hello IDS project")
