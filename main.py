@@ -28,7 +28,7 @@ print("New data frame length:", len(df))
 print("Number of rows deleted: ", (len(data) - len(df)))
 print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
-test = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
+scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
 plt.show()
 
 correlation = df.corr(method='pearson')
