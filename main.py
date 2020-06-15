@@ -35,10 +35,9 @@ correlation = df.corr(method='pearson')
 # print(correlation)
 
 # distribution of data in each class: good or bad
-print("")
 good_wines = df.loc[df['quality'] == 1].shape[0]
 bad_wines = df.loc[df['quality'] == -1].shape[0]
-print("Proportion of filtered data \n", "Good wines:", good_wines / len(df) * 100, "%\n",
+print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 100, "%\n",
       "Bad wines:", bad_wines / len(df) * 100, "%\n")
 
 print("Hello IDS project")
