@@ -4,6 +4,7 @@ from scipy.stats import zscore
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
 
 data = pd.read_csv('red_wines.csv')
 columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
@@ -46,12 +47,14 @@ print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 
 center_df = pd.DataFrame(preprocessing.scale(df, with_mean='True', with_std='True'), columns=columns)
 
 # separate data in groups : cross validation 1/5 (20% test and 80% training) : https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
-kf = KFold(n_splits = 5) # dataframe separated in 5 folds
-df_train = pd.DataFrame
-df_test = pd.DataFrame
+# kf = KFold(n_splits = 5) # dataframe separated in 5 folds
+# df_train = pd.DataFrame
+# df_test = pd.DataFrame
+# for train_index, test_index, in kf.split(center_df) :
+#     print("Train :", train_index, "Test :", test_index)
 
-for train_index, test_index in kf.split(center_df) :
-    print("Train :", train_index, "Test :", test_index)
+df_train, df_test = train_test_split(center_df, test_size=0.25, random_state=0)
+
 
 
 print("Hello IDS project")
