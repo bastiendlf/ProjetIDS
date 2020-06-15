@@ -53,7 +53,7 @@ feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual su
                 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']
 
 X = center_df[feature_cols]  # Features
-y = center_df.quality  # Target variable
+y = df.quality  # Target variable
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
 
@@ -65,5 +65,6 @@ logistic_regression.fit(X_train, y_train)
 y_pred = logistic_regression.predict(X_test)
 
 cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+print(cnf_matrix)
 
 print("Hello IDS project")
