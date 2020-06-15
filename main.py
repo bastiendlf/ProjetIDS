@@ -3,6 +3,7 @@ import pandas as pd
 from scipy.stats import zscore
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
+from sklearn.model_selection import KFold
 
 data = pd.read_csv('red_wines.csv')
 columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
@@ -29,7 +30,7 @@ print("New data frame length:", len(df))
 print("Number of rows deleted: ", (len(data) - len(df)))
 print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
 
-scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
+# scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
 # plt.show()
 
 correlation = df.corr(method='pearson')
@@ -43,5 +44,14 @@ print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 
 
 # center and reduce
 center_df = pd.DataFrame(preprocessing.scale(df, with_mean='True', with_std='True'), columns=columns)
+
+# separate data in groups : cross validation 1/5 (20% test and 80% training) : https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html
+kf = KFold(n_splits = 5) # dataframe separated in 5 folds
+df_train = pd.DataFrame
+df_test = pd.DataFrame
+
+for train_index, test_index in kf.split(center_df) :
+    print("Train :", train_index, "Test :", test_index)
+
 
 print("Hello IDS project")
