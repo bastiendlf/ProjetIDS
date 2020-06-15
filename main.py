@@ -65,6 +65,8 @@ logistic_regression.fit(X_train, y_train)
 y_pred = logistic_regression.predict(X_test)
 
 cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-print(cnf_matrix)
-
+print("Confusion Matrix:\n", cnf_matrix)
+print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+print("Precision:", metrics.precision_score(y_test, y_pred))
+print("Recall:", metrics.recall_score(y_test, y_pred))
 print("Hello IDS project")
