@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import zscore
 from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
+from sklearn.model_selection import StratifiedKFold
 
 classifiers = [
     linear_model.LogisticRegression(),
@@ -14,6 +15,21 @@ classifiers = [
     neighbors.KNeighborsClassifier(),
     tree.DecisionTreeClassifier()
 ]
+
+
+def manual_cross_validation(x_values, y_values):
+    folds = StratifiedKFold(n_splits=10)
+    for e in classifiers:
+        scores = list()
+        for train_index, test_index in folds.split(x_values, y_values):
+            x_train, x_test, y_train, y_test = x_values[train_index], x_values[test_index], \
+                                               y_values[train_index], y_values[test_index]
+
+            e.fit(x_train, y_train)
+            list.append(e.score(x_test, y_test))
+        print(e)
+        print(scores)
+        print(np.mean(scores))
 
 
 def eval_all_classifiers(x_values, y_values):
