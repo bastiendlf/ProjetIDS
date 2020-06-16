@@ -25,15 +25,12 @@ def eval_all_classifiers(x_values, y_values):
 
     for e in classifiers:
         e.fit(x_train, y_train)
-        y_pred = e.predict(x_test)
-        scores_cross_validation = cross_val_score(e, x_values, y_values, cv=10)
-        precision = metrics.precision_score(y_test, y_pred)
-        recall = metrics.recall_score(y_test, y_pred)
-        score = 2 * (precision * recall) / (precision + recall)
+        y_predicted = e.predict(x_test)
+        scores_cross_validation = cross_val_score(e, x_values, y_values, cv=5)
 
         print("\n*****************\n", e)
-        print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_pred))
-        print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-        print("Score without cross-validation:", score)
-        print("Scores with cross-validation k-fold k=10", cross_val_score(e, x_train, y_train, cv=10))
-        print("Mean score :", np.mean(scores_cross_validation))
+        print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
+        print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
+        print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
+        print("Scores with cross-validation k-fold k=10", scores_cross_validation)
+        print("Mean score :", np.average(scores_cross_validation))
