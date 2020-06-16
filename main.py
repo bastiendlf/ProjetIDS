@@ -4,6 +4,7 @@ from scipy.stats import zscore
 import matplotlib.pyplot as plt
 from sklearn import preprocessing, svm, metrics, linear_model, neighbors, tree, discriminant_analysis
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
 
 data = pd.read_csv('red_wines.csv')
 columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
@@ -68,9 +69,12 @@ for e in classifiers:
     print("\n*****************\n", e)
     e.fit(X_train, y_train)
     y_pred = e.predict(X_test)
+    scores = cross_val_score(e, X_train, y_train, cv=10)
     print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_pred))
     print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-    print("Precision:", metrics.precision_score(y_test, y_pred))
-    print("Recall:", metrics.recall_score(y_test, y_pred))
+    # print("Precision:", metrics.precision_score(y_test, y_pred))
+    # print("Recall:", metrics.recall_score(y_test, y_pred))
+    print("Scores with cross-validation k-fold k=10", cross_val_score(e, X_train, y_train, cv=10))
+    print("Mean score :", np.mean(scores))
 
 print("Hello IDS project")
