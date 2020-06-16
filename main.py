@@ -66,14 +66,17 @@ y = df.quality  # Target variable
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
 
 for e in classifiers:
-    print("\n*****************\n", e)
     e.fit(X_train, y_train)
     y_pred = e.predict(X_test)
     scores = cross_val_score(e, X_train, y_train, cv=10)
+    precision = metrics.precision_score(y_test, y_pred)
+    recall = metrics.recall_score(y_test, y_pred)
+    score = 2 * (precision * recall) / (precision + recall)
+
+    print("\n*****************\n", e)
     print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_pred))
     print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-    # print("Precision:", metrics.precision_score(y_test, y_pred))
-    # print("Recall:", metrics.recall_score(y_test, y_pred))
+    print("Score without cross-validation:", score)
     print("Scores with cross-validation k-fold k=10", cross_val_score(e, X_train, y_train, cv=10))
     print("Mean score :", np.mean(scores))
 
