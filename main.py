@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn import preprocessing
 from functions import eval_all_classifiers, plot_values, correlation_table, plot_scatter_matrix, remove_outliers, \
-    change_outliers_by_mean, manual_cross_validation
+    change_outliers_by_median, manual_cross_validation
 
 data = pd.read_csv('red_wines.csv')
 
@@ -15,7 +15,7 @@ feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual su
 # 2.2. Preparing data
 
 df_without_outliers = remove_outliers(data)
-df_replace_outliers = change_outliers_by_mean(data)
+df_replace_outliers = change_outliers_by_median(data)
 
 # correlation = correlation_table(df)
 
