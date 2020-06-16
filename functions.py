@@ -22,6 +22,12 @@ classifiers = [
 
 
 def manual_cross_validation(x_values, y_values):
+    """
+    TODO Write documentation
+    :param x_values:
+    :param y_values:
+    :return:
+    """
     folds = StratifiedKFold(n_splits=5)
     for e in classifiers:
         scores = list()
@@ -48,7 +54,7 @@ def manual_cross_validation(x_values, y_values):
         print(np.mean(scores))
 
 
-def eval_all_classifiers(x_values, y_values):
+def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
     TODO Write documentation
     :param x_values:
@@ -72,13 +78,13 @@ def eval_all_classifiers(x_values, y_values):
         print("Mean score :", np.average(scores_cross_validation))
 
 
-def remove_outliers(data):
+def remove_outliers(data: pd.DataFrame):
     """
     TODO Write documentation
     :param data:
     :return:
     """
-
+    print("\n***************Remove outliers***************")
     data = data.dropna()
     # Removing outliers https://kite.com/python/answers/how-to-remove-outliers-from-a-pandas-dataframe-in-python)
     z_scores = zscore(data)
@@ -89,16 +95,18 @@ def remove_outliers(data):
     print("Old data frame length:", len(data))
     print("New data frame length:", len(df))
     print("Number of rows deleted: ", (len(data) - len(df)))
-    print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
+    print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total individuals amount.")
     return df
 
 
-def change_outliers_by_median(data):
+def change_outliers_by_median(data: pd.DataFrame):
     """
     TODO Write documentation
     :param data:
     :return:
     """
+    print("\n***************Replace outliers by column median***************")
+    changed_values = data.isna().sum().sum()
     imp = SimpleImputer(missing_values=np.nan, strategy='median')
     imp = imp.fit(data)
     data = imp.transform(data)
@@ -108,14 +116,21 @@ def change_outliers_by_median(data):
     abs_z_scores = np.abs(z_scores)
     filtered_entries = (abs_z_scores > 3)
 
+    test = sum(sum(filtered_entries))
+
+    changed_values += test
+
     for index, column in enumerate(data.columns):
         median = data[column].median()
         data[column].loc[filtered_entries[:, index]] = median
 
+    print("Total value amount :", data.shape[0] * data.shape[1])
+    print("Outlying values found and replaced by the column median:", changed_values)
+    print("We replaced", (100 * changed_values / (data.shape[0] * data.shape[1])), "% of total values amount.")
     return data
 
 
-def plot_values(df):
+def plot_dataframe_columns(df: pd.DataFrame):
     """
     TODO Write documentation
     :param df:
@@ -130,7 +145,7 @@ def plot_values(df):
     plt.show()
 
 
-def plot_scatter_matrix(df):
+def plot_scatter_matrix(df: pd.DataFrame):
     """
     TODO Write documentation
     :param df:
@@ -141,7 +156,7 @@ def plot_scatter_matrix(df):
     return scatter_matrix
 
 
-def correlation_table(df):
+def correlation_table(df: pd.DataFrame):
     """
     TODO Write documentation
     :param df:
