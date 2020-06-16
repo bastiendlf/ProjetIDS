@@ -57,4 +57,4 @@ y = df.quality  # Target variable
 
 eval_all_classifiers(x_values=X_center_reduce, y_values=y)
 
-print("Hello IDS project")
+print("Goodbye IDS project")
