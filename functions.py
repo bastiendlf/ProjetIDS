@@ -6,6 +6,10 @@ import pandas as pd
 from scipy.stats import zscore
 from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
 from sklearn.model_selection import StratifiedKFold
+from sklearn.impute import SimpleImputer
+
+columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
+           'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality']
 
 classifiers = [
     linear_model.LogisticRegression(),
@@ -77,13 +81,26 @@ def remove_outliers(data):
     return df
 
 
-def change_outliers_by_mean(data):
+def change_outliers_by_median(data):
     """
     TODO Write documentation
     :param data:
     :return:
     """
-    return 0
+    imp = SimpleImputer(missing_values=np.nan, strategy='median')
+    imp = imp.fit(data)
+    data = imp.transform(data)
+    data = pd.DataFrame(data, columns=columns)
+
+    z_scores = zscore(data)
+    abs_z_scores = np.abs(z_scores)
+    filtered_entries = (abs_z_scores > 3)
+
+    for index, column in enumerate(data.columns):
+        median = data[column].median()
+        data[column].loc[filtered_entries[:, index]] = median
+
+    return data
 
 
 def plot_values(df, columns):
