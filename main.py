@@ -1,9 +1,6 @@
-import numpy as np
 import pandas as pd
-from scipy.stats import zscore
 from sklearn import preprocessing
-
-from functions import eval_all_classifiers, plot_values, correlation_table
+from functions import eval_all_classifiers, plot_values, correlation_table, plot_scatter_matrix, remove_outliers
 
 data = pd.read_csv('red_wines.csv')
 
@@ -15,22 +12,10 @@ feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual su
                 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']
 
 # 2.2. Preparing data
+# Removing rows with nan values and/or outliers
+df = remove_outliers(data)
 
-# Removing rows with nan values
-data = data.dropna()
-
-# Removing outliers https://kite.com/python/answers/how-to-remove-outliers-from-a-pandas-dataframe-in-python)
-z_scores = zscore(data)
-abs_z_scores = np.abs(z_scores)
-filtered_entries = (abs_z_scores < 3).all(axis=1)
-df = data[filtered_entries]
-
-print("Old data frame length:", len(data))
-print("New data frame length:", len(df))
-print("Number of rows deleted: ", (len(data) - len(df)))
-print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
-
-correlation = correlation_table(df)
+# correlation = correlation_table(df)
 
 # distribution of data in each class: good or bad
 good_wines = df.loc[df['quality'] == 1].shape[0]
@@ -46,4 +31,4 @@ eval_all_classifiers(x_values=center_df[feature_cols], y_values=df.quality)
 # print("***************Raw values***************")
 # eval_all_classifiers(x_values=df[feature_cols], y_values=df.quality)
 
-print("Hello IDS project")
+print("Goodbye IDS project")

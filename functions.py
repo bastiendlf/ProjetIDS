@@ -1,9 +1,10 @@
-from sklearn import svm, metrics, linear_model, neighbors, tree, discriminant_analysis
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import train_test_split
+from sklearn import metrics
+from sklearn.model_selection import cross_val_score, train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from scipy.stats import zscore
+from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
 
 classifiers = [
     linear_model.LogisticRegression(),
@@ -38,6 +39,28 @@ def eval_all_classifiers(x_values, y_values):
         print("Mean score :", np.average(scores_cross_validation))
 
 
+def remove_outliers(data):
+    """
+    TODO Write documentation
+    :param data:
+    :return:
+    """
+
+    data = data.dropna()
+    # Removing outliers https://kite.com/python/answers/how-to-remove-outliers-from-a-pandas-dataframe-in-python)
+    z_scores = zscore(data)
+    abs_z_scores = np.abs(z_scores)
+    filtered_entries = (abs_z_scores < 3).all(axis=1)
+    df = data[filtered_entries]
+
+    print("Old data frame length:", len(data))
+    print("New data frame length:", len(df))
+    print("Number of rows deleted: ", (len(data) - len(df)))
+    print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
+
+    return df
+
+
 def plot_values(df, columns):
     """
     TODO Write documentation
@@ -62,4 +85,9 @@ def plot_scatter_matrix(df):
 
 
 def correlation_table(df):
+    """
+    TODO Write documentation
+    :param df:
+    :return:
+    """
     return df.corr(method='pearson')
