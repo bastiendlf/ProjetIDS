@@ -115,16 +115,19 @@ def change_outliers_by_median(data):
     return data
 
 
-def plot_values(df, columns):
+def plot_values(df):
     """
     TODO Write documentation
     :param df:
-    :param columns:
     :return:
     """
-    for e in columns:
-        df.boxplot(column=e)
-        plt.show()
+    fig, axes = plt.subplots(2, 6)  # create figure and axes
+
+    for index, element in enumerate(list(df.columns.values)[:-1]):
+        a = df.boxplot(column=element, ax=axes.flatten()[index])
+
+    fig.delaxes(axes[1, 5])
+    plt.show()
 
 
 def plot_scatter_matrix(df):

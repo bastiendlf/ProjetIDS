@@ -15,7 +15,9 @@ feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual su
 # 2.2. Preparing data
 
 df_without_outliers = remove_outliers(data)
+# plot_values(df_without_outliers)
 df_replace_outliers = change_outliers_by_median(data)
+# plot_values(df_replace_outliers)
 
 # correlation = correlation_table(df)
 
