@@ -1,5 +1,5 @@
 from sklearn import metrics
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, learning_curve
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -18,15 +18,27 @@ classifiers = [
 
 
 def manual_cross_validation(x_values, y_values):
-    folds = StratifiedKFold(n_splits=10)
+    folds = StratifiedKFold(n_splits=5)
     for e in classifiers:
         scores = list()
         for train_index, test_index in folds.split(x_values, y_values):
-            x_train, x_test, y_train, y_test = x_values[train_index], x_values[test_index], \
-                                               y_values[train_index], y_values[test_index]
+            # x_train, x_test, y_train, y_test = x_values[train_index], x_values[test_index], \
+            #                                    y_values[train_index], y_values[test_index]
+            x_train = pd.DataFrame()
+            x_test = pd.DataFrame()
+
+            x_train = x_train.append([x_values.iloc[train_index]], ignore_index=True)
+            x_test = x_test.append([x_values.iloc[test_index]], ignore_index=True)
+
+            y_train = pd.Series()
+            y_test = pd.Series()
+
+            y_test = y_test.append([y_values.iloc[test_index]], ignore_index=True)
+            y_train = y_train.append([y_values.iloc[train_index]], ignore_index=True)
 
             e.fit(x_train, y_train)
-            list.append(e.score(x_test, y_test))
+
+            scores.append(e.score(x_test, y_test))
         print(e)
         print(scores)
         print(np.mean(scores))

@@ -30,9 +30,10 @@ center_df = pd.DataFrame(preprocessing.scale(df_without_outliers, with_mean='Tru
 
 print("***************Center values***************")
 eval_all_classifiers(x_values=center_df[feature_cols], y_values=df_without_outliers.quality)
-# manual_cross_validation(x_values=center_df[feature_cols], y_values=df_without_outliers.quality)
 
 # print("***************Raw values***************")
 # eval_all_classifiers(x_values=df_without_outliers[feature_cols], y_values=df_without_outliers.quality)
 
 print("Goodbye IDS project")
+
+manual_cross_validation(x_values=center_df[feature_cols], y_values=df_without_outliers.quality)
