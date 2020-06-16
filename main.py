@@ -17,7 +17,6 @@ feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual su
 df_without_outliers = remove_outliers(data)
 df_replace_outliers = change_outliers_by_median(data)
 
-print("test")
 # correlation = correlation_table(df)
 
 # distribution of data in each class: good or bad
