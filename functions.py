@@ -29,6 +29,7 @@ def eval_all_classifiers(x_values, y_values):
     for e in classifiers:
         e.fit(x_train, y_train)
         y_predicted = e.predict(x_test)
+
         scores_cross_validation = cross_val_score(e, x_values, y_values, cv=5)
 
         print("\n*****************\n", e)
@@ -57,8 +58,16 @@ def remove_outliers(data):
     print("New data frame length:", len(df))
     print("Number of rows deleted: ", (len(data) - len(df)))
     print("We removed ", ((len(data) - len(df)) / len(data)) * 100, "% of total values amount.")
-
     return df
+
+
+def change_outliers_by_mean(data):
+    """
+    TODO Write documentation
+    :param data:
+    :return:
+    """
+    return 0
 
 
 def plot_values(df, columns):
