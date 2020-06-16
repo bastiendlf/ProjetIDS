@@ -51,10 +51,9 @@ print("\nProportion of filtered data \n", "Good wines:", good_wines / len(df) * 
 # center and reduce
 center_df = pd.DataFrame(preprocessing.scale(df, with_mean='True', with_std='True'), columns=columns)
 
-# split dataset in features and target variable
-X_center_reduce = center_df[feature_cols]  # Features
-y = df.quality  # Target variable
+print("***************Center values***************")
+eval_all_classifiers(x_values=center_df[feature_cols], y_values=df.quality)
+# print("***************Raw values***************")
+# eval_all_classifiers(x_values=df[feature_cols], y_values=df.quality)
 
-eval_all_classifiers(x_values=X_center_reduce, y_values=y)
-
-print("Goodbye IDS project")
+print("Hello IDS project")
