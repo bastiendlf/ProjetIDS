@@ -2,6 +2,8 @@ from sklearn import svm, metrics, linear_model, neighbors, tree, discriminant_an
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 
 classifiers = [
     linear_model.LogisticRegression(),
@@ -34,3 +36,30 @@ def eval_all_classifiers(x_values, y_values):
         print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
         print("Scores with cross-validation k-fold k=10", scores_cross_validation)
         print("Mean score :", np.average(scores_cross_validation))
+
+
+def plot_values(df, columns):
+    """
+    TODO Write documentation
+    :param df:
+    :param columns:
+    :return:
+    """
+    for e in columns:
+        df.boxplot(column=e)
+        plt.show()
+
+
+def plot_scatter_matrix(df):
+    """
+    TODO Write documentation
+    :param df:
+    :return:
+    """
+    scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
+    plt.show()
+    return scatter_matrix
+
+
+def correlation_table(df):
+    return df.corr(method='pearson')
