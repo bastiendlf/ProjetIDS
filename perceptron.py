@@ -21,12 +21,12 @@ class Perceptron:
         :return:
         """
 
-        summation = np.dot(x_values, self.theta[1:]) + self.theta[0]
-        if summation > 0:
-            activation = 1
+        sign_function = np.dot(x_values, self.theta[1:]) + self.theta[0]
+        if sign_function > 0:
+            prediction = 1
         else:
-            activation = 0
-        return activation
+            prediction = 0
+        return prediction
 
     def fit(self, x_train, y_train):
         """
@@ -37,13 +37,9 @@ class Perceptron:
         :return:
         """
         for _ in range(self.threshold):
-            for inputs, label in zip(x_train.values, y_train):
-                prediction = self.predict(inputs)
-                self.theta[1:] += self.learning_rate * (label - prediction) * inputs
-                self.theta[0] += self.learning_rate * (label - prediction)
-
-        # for _ in range(self.threshold):
-        #     for x_i, y_i in zip(x_train.values, y_train):
-        #         prediction = self.predict(x_i)
-        #         self.theta[0] += self.learning_rate * (y_i - prediction)  # Theta0 = Theta0 + Êta * (y)
-        #         self.theta[1:] += self.learning_rate * (y_i - prediction) * x_i  # Theta = Theta0 + Êta * (y) * x_i
+            for x_values, y in zip(x_train.values, y_train):
+                prediction = self.predict(x_values)
+                # Theta = Theta0 + Êta * (y - y_hat) * x_i
+                self.theta[1:] += self.learning_rate * (y - prediction) * x_values
+                # Theta0 = Theta0 + Êta * (y - y_hat)
+                self.theta[0] += self.learning_rate * (y - prediction)
