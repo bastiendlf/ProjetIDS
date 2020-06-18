@@ -3,6 +3,9 @@ import pandas as pd
 
 
 class Perceptron:
+    """
+    Implements a perceptron
+    """
 
     def __init__(self, nb_input: int, learning_rate: int = 0.001, threshold: int = 100):
         self.theta = np.zero(nb_input + 1)  # we add 1 line because of theta0
@@ -10,7 +13,7 @@ class Perceptron:
         self.threshold = threshold  # max number of iteration
         self.learning_rate = learning_rate  # it represents Êta in the lesson
 
-    def predict(self, x_values: pd.DataFrame):
+    def predict(self, x_values):
         """
         TODO Write documentation
         :param self:
@@ -30,7 +33,7 @@ class Perceptron:
 
         return y_prediction
 
-    def fit(self, x_train: pd.core.frame.DataFrame, y_train: pd.core.series.Series):
+    def fit(self, x_train, y_train):
         """
         TODO Write documentation
         :param self:
@@ -39,5 +42,7 @@ class Perceptron:
         :return:
         """
         for _ in range(self.threshold):
-            for x, y in zip(x_train, y_train):
-                pass
+            for x_i, y_i in zip(x_train, y_train):
+                prediction = self.predict(x_i)
+                self.theta[0] += self.learning_rate * (y_i - prediction)  # Theta0 = Theta0 + Êta * (y)
+                self.theta[1:] += self.learning_rate * (y_i - prediction) * x_i  # Theta = Theta0 + Êta * (y) * x_i
