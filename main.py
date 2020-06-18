@@ -21,7 +21,12 @@ df_replace_outliers = change_outliers_by_median(data)
 # plot_dataframe_columns(df_without_outliers)
 # plot_dataframe_columns(df_replace_outliers)
 
-# correlation = correlation_table(df)
+# plot_scatter_matrix(df_without_outliers)
+# plot_scatter_matrix(df_replace_outliers)
+
+# correlation1 = correlation_table(df_without_outliers)
+correlation2 = correlation_table(df_replace_outliers)
+print(correlation2)
 
 # distribution of data in each class: good or bad
 good_wines = data.loc[data['quality'] == 1].shape[0]
@@ -31,9 +36,13 @@ print("\nProportion in classes: \n", "Good wines:", good_wines / len(data) * 100
 
 # center and reduce
 center_df = pd.DataFrame(preprocessing.scale(df_without_outliers, with_mean='True', with_std='True'), columns=columns)
+center_df2 = pd.DataFrame(preprocessing.scale(df_replace_outliers, with_mean='True', with_std='True'), columns=columns)
 
 print("***************Center values***************")
-eval_all_classifiers(x_values=center_df[feature_cols], y_values=df_without_outliers.quality)
+# eval_all_classifiers(x_values=center_df[feature_cols], y_values=df_without_outliers.quality)
+eval_all_classifiers(
+    x_values=center_df2[feature_cols],
+    y_values=df_replace_outliers.quality)
 
 # print("***************Raw values***************")
 # eval_all_classifiers(x_values=df_without_outliers[feature_cols], y_values=df_without_outliers.quality)
