@@ -1,8 +1,8 @@
-from sklearn import metrics
-from sklearn.model_selection import cross_val_score, train_test_split, learning_curve
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn import metrics
+from sklearn.model_selection import cross_val_score, train_test_split, learning_curve
 from scipy.stats import zscore
 from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
 from sklearn.model_selection import StratifiedKFold
@@ -32,8 +32,6 @@ def manual_cross_validation(x_values, y_values):
     for e in classifiers:
         scores = list()
         for train_index, test_index in folds.split(x_values, y_values):
-            # x_train, x_test, y_train, y_test = x_values[train_index], x_values[test_index], \
-            #                                    y_values[train_index], y_values[test_index]
             x_train = pd.DataFrame()
             x_test = pd.DataFrame()
 
