@@ -20,13 +20,8 @@ class Perceptron:
         :param x_values:
         :return:
         """
-
         sign_function = np.dot(x_values, self.theta[1:]) + self.theta[0]
-        if sign_function > 0:
-            prediction = 1
-        else:
-            prediction = 0
-        return prediction
+        return 1.0 if sign_function > 0. else -1
 
     def fit(self, x_train, y_train):
         """
@@ -39,6 +34,7 @@ class Perceptron:
         for _ in range(self.threshold):
             for x_values, y in zip(x_train.values, y_train):
                 prediction = self.predict(x_values)
+                # Stochastic Gradient Descent :
                 # Theta = Theta0 + Êta * (y - y_hat) * x_i
                 self.theta[1:] += self.learning_rate * (y - prediction) * x_values
                 # Theta0 = Theta0 + Êta * (y - y_hat)
