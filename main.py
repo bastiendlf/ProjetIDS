@@ -10,8 +10,7 @@ columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
            'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality']
 
 feature_cols = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
-                'free sulfur dioxide',
-                'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']
+                'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']
 
 # 2.2. Preparing data
 df_dict = dict()
@@ -53,7 +52,6 @@ print("Goodbye IDS project")
 
 # manual_cross_validation(x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)
 
-x_values = df_dict["remove_outliers"][feature_cols]
-y_values = df_dict["remove_outliers"].quality
+# 3.3. Testing perceptron implementation with project data
 
-eval_perceptron(x_values=df_dict["remove_outliers"][feature_cols], y_values=df_dict["remove_outliers"].quality)
+eval_perceptron(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)

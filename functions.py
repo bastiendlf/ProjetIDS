@@ -86,7 +86,7 @@ def eval_perceptron(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
 
     x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.25, random_state=0)
-    perceptron = Perceptron(x_train.shape[1], learning_rate=0.000001, threshold=10000)
+    perceptron = Perceptron(x_train.shape[1], learning_rate=0.000001, threshold=500)
 
     perceptron.fit(x_train, y_train)
     y_predicted = list()
