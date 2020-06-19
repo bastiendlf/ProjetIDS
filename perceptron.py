@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 
 class Perceptron:
@@ -21,7 +20,7 @@ class Perceptron:
         :return:
         """
         sign_function = np.dot(x_values, self.theta[1:]) + self.theta[0]
-        return 1.0 if sign_function > 0. else -1
+        return 1.0 if sign_function > 0. else -1.0
 
     def fit(self, x_train, y_train):
         """

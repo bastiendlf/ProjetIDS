@@ -5,10 +5,7 @@ import matplotlib.pyplot as plt
 
 def plot_values(x, y, eval):
     for i in range(len(x)):
-        if eval[i] == 1:
-            color = 'blue'
-        else:
-            color = 'red'
+        color = "blue" if eval[i] == 1 else "red"
         plt.scatter(x[i], y[i], c=color, marker='o')
     plt.title('Data visualization')
     plt.show()
