@@ -21,7 +21,7 @@ class Perceptron:
         """
         # prediction = sign(Theta * x + Theta0)
         sign_function = np.dot(x_values, self.theta[1:]) + self.theta[0]
-        return 1.0 if sign_function > 0. else -1.0
+        return 1 if sign_function > 0. else -1
 
     def fit(self, x_train, y_train):
         """
@@ -39,3 +39,6 @@ class Perceptron:
                 self.theta[1:] += self.learning_rate * (y - prediction) * x_values
                 # Theta0 = Theta0 + Êta * (y - y_hat)
                 self.theta[0] += self.learning_rate * (y - prediction)
+
+    def __str__(self):
+        return "Perceptron()"

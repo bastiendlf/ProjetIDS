@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn import preprocessing
 from functions import eval_all_classifiers, plot_dataframe_columns, correlation_table, plot_scatter_matrix, \
     remove_outliers, \
-    change_outliers_by_median, manual_cross_validation
+    change_outliers_by_median, manual_cross_validation, eval_perceptron
 
 data = pd.read_csv('red_wines.csv')
 
@@ -51,4 +51,9 @@ eval_all_classifiers(x_values=df_dict["remove_center"][feature_cols], y_values=d
 
 print("Goodbye IDS project")
 
-manual_cross_validation(x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)
+# manual_cross_validation(x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)
+
+x_values = df_dict["remove_outliers"][feature_cols]
+y_values = df_dict["remove_outliers"].quality
+
+eval_perceptron(x_values=df_dict["remove_outliers"][feature_cols], y_values=df_dict["remove_outliers"].quality)
