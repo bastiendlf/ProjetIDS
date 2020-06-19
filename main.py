@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn import preprocessing
 from functions import eval_all_classifiers, plot_dataframe_columns, correlation_table, plot_scatter_matrix, \
     remove_outliers, \
-    change_outliers_by_median, manual_cross_validation, eval_perceptron
+    change_outliers_by_median, manual_cross_validation, eval_perceptron, eval_learning_rate
 
 data = pd.read_csv('red_wines.csv')
 
@@ -54,4 +54,5 @@ print("Goodbye IDS project")
 
 # 3.3. Testing perceptron implementation with project data
 
-eval_perceptron(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)
+# eval_perceptron(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)
+eval_learning_rate(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)

@@ -77,27 +77,48 @@ def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series
         print("Mean score :", np.average(scores_cross_validation))
 
 
-def eval_perceptron(x_values: pd.DataFrame, y_values: pd.core.series.Series):
+def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val: pd.DataFrame,
+                    y_val: pd.core.series.Series, learning_rate):
     """
     TODO Write documentation
     :param x_values:
     :param y_values:
     :return:
     """
-
-    x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.25, random_state=0)
-    perceptron = Perceptron(x_train.shape[1], learning_rate=0.000001, threshold=500)
+    perceptron = Perceptron(x_train.shape[1], learning_rate=learning_rate, threshold=500)
 
     perceptron.fit(x_train, y_train)
     y_predicted = list()
 
-    for element in x_test.values:
+    for element in x_val.values:
         y_predicted.append(perceptron.predict(element))
+    # print("\n*****************\n", perceptron)
+    # print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
+    # print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
+    # print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
+    return metrics.accuracy_score(y_val, y_predicted)
 
-    print("\n*****************\n", perceptron)
-    print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
-    print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
-    print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
+
+def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
+    """
+    TODO Write documentation
+    :param data:
+    :return:
+    """
+    x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.2,
+                                                        random_state=0)  # train = 80%, test = 20%
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.25,
+                                                      random_state=1)  # train = 60%, val = 20%, test = 20%
+
+    accuracies = list()
+    learning_rates = list(
+        [0.000001, 0.000500, 0.001000, 0.001500, 0.002000, 0.002500, 0.003000, 0.003500, 0.004000, 0.004500, 0.005000])
+
+    for accuracy in accuracies:  # from 10e-6 to 10e-4 with a step of
+        scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
+
+    plt.scatter(learning_rates, scores, c='red', marker='o')
+    plt.show()
 
 
 def remove_outliers(data: pd.DataFrame):
