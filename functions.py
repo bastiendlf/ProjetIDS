@@ -13,23 +13,26 @@ columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
            'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality']
 
 classifiers = [
-    linear_model.LogisticRegression(),
+    linear_model.LogisticRegression(max_iter=10000),
     svm.SVC(),
     discriminant_analysis.LinearDiscriminantAnalysis(),
     discriminant_analysis.QuadraticDiscriminantAnalysis(),
     neighbors.KNeighborsClassifier(),
-    tree.DecisionTreeClassifier()
+    tree.DecisionTreeClassifier(max_depth=1000)
 ]
 
 
-def manual_cross_validation(x_values, y_values):
+def manual_cross_validation(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
-    TODO Write documentation
-    :param x_values:
-    :param y_values:
-    :return:
+    We manually implemented the cross_val_score function from sklearn to compare results.
+    :param x_values: pd.DataFrame with input values
+    :param y_values: pd.core.series.Series with labels (+1 or -1)
+    :return: dictionary containing results
     """
-    folds = StratifiedKFold(n_splits=5)
+    global classifiers
+    results = dict()
+
+    folds = StratifiedKFold(n_splits=10)
     for e in classifiers:
         scores = list()
         for train_index, test_index in folds.split(x_values, y_values):
@@ -48,18 +51,22 @@ def manual_cross_validation(x_values, y_values):
             e.fit(x_train, y_train)
 
             scores.append(e.score(x_test, y_test))
-        print(e)
-        print(scores)
-        print(np.mean(scores))
+
+        results[e.__str__()] = np.average(np.mean(scores))
+
+    return results
 
 
 def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
-    TODO Write documentation
-    :param x_values:
-    :param y_values:
-    :return:
+    Evaluates all classifier scores with different metrics.
+    :param x_values: pd.DataFrame with input values
+    :param y_values: pd.core.series.Series with labels (+1 or -1)
+    :return: dictionary containing results
     """
+    global classifiers
+
+    results = dict()
 
     x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.25, random_state=0)
 
@@ -67,7 +74,7 @@ def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series
         e.fit(x_train, y_train)
         y_predicted = e.predict(x_test)
 
-        scores_cross_validation = cross_val_score(e, x_values, y_values, cv=5)
+        scores_cross_validation = cross_val_score(e, x_values, y_values, cv=10)
 
         print("\n*****************\n", e)
         print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
@@ -75,18 +82,21 @@ def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series
         print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
         print("Scores with cross-validation k-fold k=10", scores_cross_validation)
         print("Mean score :", np.average(scores_cross_validation))
+        results[e.__str__()] = np.average(scores_cross_validation)
+
+    return results
 
 
 def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val: pd.DataFrame,
                     y_val: pd.core.series.Series, learning_rate):
     """
-    TODO Write documentation
-    :param x_train:
-    :param y_train:
-    :param x_val:
-    :param y_val:
-    :param learning_rate:
-    :return:
+    Trains a perceptron classifier and returns the score obtained with the given learning rate.
+    :param x_train: pd.DataFrame that contains x values to train perceptron
+    :param y_train: pd.core.series.Series that contains labels to train perceptron
+    :param x_val: pd.DataFrame that contains x values to determine which value of learning rate is the best
+    :param y_val: pd.core.series.Series that contains labels to determine which value of learning rate is the best
+    :param learning_rate: learning rate you want to test
+    :return: score
     """
 
     perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500,
@@ -97,18 +107,15 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
 
     for element in x_val.values:
         y_predicted.append(perceptron.predict(element))
-    # print("\n*****************\n", perceptron)
     print("Confusion Matrix:\n", metrics.confusion_matrix(y_val, y_predicted))
-    # print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
-    # print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
     return metrics.f1_score(y_val, y_predicted)
 
 
 def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
-    TODO Write documentation
-    :param x_values:
-    :param y_values:
+    Trains different perceptron with the given data with different learning rate values.
+    :param x_values: pd.DataFrame with input values
+    :param y_values: pd.core.series.Series with labels (+1 or -1)
     :return:
     """
     x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.2,
@@ -122,18 +129,20 @@ def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
         scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
 
     plt.scatter(learning_rates, scores, c='red', marker='o')
+    plt.title("Evolution of the score according to the learning rate ")
+    plt.xlabel('Learning rate')
+    plt.ylabel('Score obtained')
     plt.show()
 
 
 def remove_outliers(data: pd.DataFrame):
     """
-    TODO Write documentation
-    :param data:
-    :return:
+    Remove outliers from a dataframe based on NAN or ZSCORE (https://fr.wikipedia.org/wiki/Cote_Z_(statistiques)).
+    :param data: pd.DataFrame
+    :return: pd.DataFrame without outliers
     """
     print("\n***************Remove outliers***************")
     data = data.dropna()
-    # Removing outliers https://kite.com/python/answers/how-to-remove-outliers-from-a-pandas-dataframe-in-python)
     z_scores = zscore(data)
     abs_z_scores = np.abs(z_scores)
     filtered_entries = (abs_z_scores < 3).all(axis=1)
@@ -148,9 +157,9 @@ def remove_outliers(data: pd.DataFrame):
 
 def change_outliers_by_median(data: pd.DataFrame):
     """
-    TODO Write documentation
-    :param data:
-    :return:
+    Replace outliers by column median based NAN or on ZSCORE (https://fr.wikipedia.org/wiki/Cote_Z_(statistiques)).
+    :param data: pd.DataFrame
+    :return: pd.DataFrame with replaced outliers
     """
     print("\n***************Replace outliers by column median***************")
     changed_values = data.isna().sum().sum()
@@ -177,26 +186,31 @@ def change_outliers_by_median(data: pd.DataFrame):
     return data
 
 
-def plot_dataframe_columns(df: pd.DataFrame):
+def plot_dataframe_columns(df: pd.DataFrame, title: str = None):
     """
-    TODO Write documentation
-    :param df:
+    Plots each column of the dataframe with box plots.
+    :param df: pd.DataFrame
+    :param title: str
     :return:
     """
+
     fig, axes = plt.subplots(2, 6)  # create figure and axes
 
     for index, element in enumerate(list(df.columns.values)[:-1]):
         df.boxplot(column=element, ax=axes.flatten()[index])
 
     fig.delaxes(axes[1, 5])
+
+    if title is not None:
+        plt.title(title, y=2.2)
     plt.show()
 
 
 def plot_scatter_matrix(df: pd.DataFrame):
     """
-    TODO Write documentation
-    :param df:
-    :return:
+    Plots and returns scatter matrix (https://pandas.pydata.org/docs/reference/api/pandas.plotting.scatter_matrix.html).
+    :param df: pd.DataFrame
+    :return: numpy.ndarray scatter_matrix
     """
     scatter_matrix = pd.plotting.scatter_matrix(df, alpha=0.2, diagonal='hist')
     plt.show()
@@ -205,8 +219,8 @@ def plot_scatter_matrix(df: pd.DataFrame):
 
 def correlation_table(df: pd.DataFrame):
     """
-    TODO Write documentation
-    :param df:
-    :return:
+    Computes and returns correlation matrix of a dataframe.
+    :param df: pd.DataFrame
+    :return: DataFrame with correlation matrix.
     """
     return df.corr(method='pearson')
