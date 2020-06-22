@@ -20,8 +20,9 @@ def plot_values(x, y, evaluation, title: str = "Title", separator=None):
 
     if separator is not None:
         x_range = np.linspace(min(x), max(x))
-        plt.plot(x_range, separator(x_range))
+        plt.plot(x_range, separator(x_range), label="Separator")
     plt.title(title)
+    plt.legend(loc='best')
     plt.show()
 
 
