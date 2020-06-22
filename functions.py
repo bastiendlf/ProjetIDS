@@ -89,7 +89,7 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     :return:
     """
 
-    perceptron = Perceptron(x_train.shape[1], learning_rate=learning_rate, threshold=500)
+    perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500)
 
     perceptron.fit(x_train, y_train)
     y_predicted = list()
@@ -97,10 +97,10 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     for element in x_val.values:
         y_predicted.append(perceptron.predict(element))
     # print("\n*****************\n", perceptron)
-    # print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
+    print("Confusion Matrix:\n", metrics.confusion_matrix(y_val, y_predicted))
     # print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
     # print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
-    return metrics.accuracy_score(y_val, y_predicted)
+    return metrics.f1_score(y_val, y_predicted)
 
 
 def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
@@ -118,8 +118,8 @@ def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     learning_rates = list(
         [0.000001, 0.000500, 0.001000, 0.001500, 0.002000, 0.002500, 0.003000, 0.003500, 0.004000, 0.004500, 0.005000])
 
-    for accuracy in learning_rates:  # from 10e-6 to 10e-4 with a step of
-        scores.append(eval_perceptron(x_train, y_train, x_val, y_val, accuracy))
+    for learning_rate in learning_rates:  # from 10e-6 to 10e-4 with a step of
+        scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
 
     plt.scatter(learning_rates, scores, c='red', marker='o')
     plt.show()

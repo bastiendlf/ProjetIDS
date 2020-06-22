@@ -26,7 +26,7 @@ def plot_values(x, y, evaluation, title: str = "Title", separator=None):
     plt.show()
 
 
-perceptron = Perceptron(nb_input=2, learning_rate=0.01, threshold=10)
+perceptron = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10)
 
 dict1 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
 list1 = [1, -1, -1, -1]
@@ -50,7 +50,7 @@ list2 = [1, 1, 1, -1]
 x_train2 = pd.DataFrame(dict2)
 y_train2 = pd.Series(list2)
 
-perceptron2 = Perceptron(nb_input=2, learning_rate=0.01, threshold=10)
+perceptron2 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10)
 
 perceptron2.fit(x_train2, y_train2)
 
@@ -71,7 +71,7 @@ list3 = [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1]
 x_train3 = pd.DataFrame(dict3)
 y_train3 = pd.Series(list3)
 
-perceptron3 = Perceptron(nb_input=2, learning_rate=0.01, threshold=10)
+perceptron3 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10)
 
 perceptron3.fit(x_train3, y_train3)
 
