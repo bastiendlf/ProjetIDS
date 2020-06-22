@@ -55,4 +55,4 @@ print("Goodbye IDS project")
 # 3.3. Testing perceptron implementation with project data
 
 # eval_perceptron(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)
-eval_learning_rate(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)
+eval_learning_rate(x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)

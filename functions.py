@@ -89,7 +89,8 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     :return:
     """
 
-    perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500)
+    perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500,
+                            acceptable_error=220)
 
     perceptron.fit(x_train, y_train)
     y_predicted = list()
@@ -115,8 +116,7 @@ def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.25,
                                                       random_state=1)  # train = 60%, val = 20%, test = 20%
     scores = list()
-    learning_rates = list(
-        [0.000001, 0.000500, 0.001000, 0.001500, 0.002000, 0.002500, 0.003000, 0.003500, 0.004000, 0.004500, 0.005000])
+    learning_rates = [0.000001, 1, 10, 50, 100, 500, 1000, 5000, 10000]
 
     for learning_rate in learning_rates:  # from 10e-6 to 10e-4 with a step of
         scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
