@@ -40,5 +40,8 @@ class Perceptron:
                 # Theta0 = Theta0 + Êta * (y - y_hat)
                 self.theta[0] += self.learning_rate * (y - prediction)
 
+    def get_equation_2D(self):
+        return lambda x: -1 / self.theta[2] * (self.theta[0] + self.theta[1] * x)
+
     def __str__(self):
         return "Perceptron()"
