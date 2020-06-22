@@ -15,10 +15,10 @@ class Perceptron:
         :param acceptable_error: number of elements that can be misspredicted during learning
         """
         self.theta = np.random.rand(nb_x_column + 1)  # we add 1 line because of theta0
-        # We choose to init this matrix with zeros but we could init it with random values
+        # self.theta = np.zeros(nb_x_column + 1) # funny when init theta with zeros
         self.threshold = threshold  # max number of iteration
         self.learning_rate = learning_rate  # it represents Êta in the lesson
-        self.acceptable_error = acceptable_error  # it represents Epsilon in the lesson
+        self.acceptable_error = acceptable_error  # acceptable number of errors during learning
 
     def predict(self, x_values):
         """

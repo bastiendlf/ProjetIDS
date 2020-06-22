@@ -27,7 +27,7 @@ def plot_values(x, y, evaluation, title: str = "Title", separator=None):
 
 
 if __name__ == "__main__":
-    perceptron = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10, acceptable_error=0)
+    perceptron = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=100, acceptable_error=0)
 
     dict1 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
     list1 = [1, -1, -1, -1]
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     x_train2 = pd.DataFrame(dict2)
     y_train2 = pd.Series(list2)
 
-    perceptron2 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10, acceptable_error=0)
+    perceptron2 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=100, acceptable_error=0)
 
     perceptron2.fit(x_train2, y_train2)
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     x_train3 = pd.DataFrame(dict3)
     y_train3 = pd.Series(list3)
 
-    perceptron3 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=10, acceptable_error=0)
+    perceptron3 = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=100, acceptable_error=0)
 
     perceptron3.fit(x_train3, y_train3)
 
@@ -80,6 +80,6 @@ if __name__ == "__main__":
     print('(1 11) ->', perceptron3.predict(pd.DataFrame({'X1': [1], 'X2': [11]})), ': excepted 1.')
     print('(2 12) ->', perceptron3.predict(pd.DataFrame({'X1': [2], 'X2': [12]})), ': excepted 1.')
     print('(10 0) ->', perceptron3.predict(pd.DataFrame({'X1': [10], 'X2': [0]})), ': excepted -1.')
-    print('(12 2) ->', perceptron3.predict(pd.DataFrame({'X1': [12], 'X2': [2]})), ': excepted -1.')
+    print('(12 1) ->', perceptron3.predict(pd.DataFrame({'X1': [12], 'X2': [1]})), ': excepted -1.')
     plot_values(x1, x2, list3, title="Visualization of linear separable values",
                 separator=perceptron3.get_equation_2D())

@@ -1,11 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn import metrics
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, StratifiedKFold
 from scipy.stats import zscore
-from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
-from sklearn.model_selection import StratifiedKFold
+from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis, metrics
 from sklearn.impute import SimpleImputer
 from perceptron import Perceptron
 
@@ -134,7 +132,7 @@ def eval_learning_rate(x_train: pd.DataFrame, y_train: pd.core.series.Series,
     :param y_train:
     :param x_val:
     :param y_val:
-    :return:
+    :return: learning rate with best score
     """
 
     scores = list()
@@ -148,6 +146,8 @@ def eval_learning_rate(x_train: pd.DataFrame, y_train: pd.core.series.Series,
     plt.xlabel('Learning rate')
     plt.ylabel('Score obtained')
     plt.show()
+
+    return learning_rates[scores.index(max(scores))]
 
 
 def remove_outliers(data: pd.DataFrame):
