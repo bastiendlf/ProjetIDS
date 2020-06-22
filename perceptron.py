@@ -14,7 +14,7 @@ class Perceptron:
         :param threshold: threshold to limit a max number of iteration in case if there is no convergence
         :param acceptable_error: number of elements that can be misspredicted during learning
         """
-        self.theta = np.zeros(nb_x_column + 1)  # we add 1 line because of theta0
+        self.theta = np.random.rand(nb_x_column + 1)  # we add 1 line because of theta0
         # We choose to init this matrix with zeros but we could init it with random values
         self.threshold = threshold  # max number of iteration
         self.learning_rate = learning_rate  # it represents Êta in the lesson

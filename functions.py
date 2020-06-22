@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn import metrics
-from sklearn.model_selection import cross_val_score, train_test_split, learning_curve
+from sklearn.model_selection import cross_val_score, train_test_split
 from scipy.stats import zscore
 from sklearn import svm, linear_model, neighbors, tree, discriminant_analysis
 from sklearn.model_selection import StratifiedKFold
@@ -87,6 +87,21 @@ def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series
     return results
 
 
+def split_train_validation_test_values(x_values: pd.DataFrame, y_values: pd.core.series.Series):
+    """
+    Split dataframe into 3 parts : train 60%, data validation (for learning rate) 20% and 20% test
+    :param x_values:  pd.DataFrame x values
+    :param y_values: pd.core.series.Series labels
+    :return: x_train, y_train, x_val, y_val, x_test, y_test
+    """
+    x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.2,
+                                                        random_state=0)  # train = 80%, test = 20%
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.25,
+                                                      random_state=1)  # train = 60%, val = 20%, test = 20%
+
+    return x_train, y_train, x_val, y_val, x_test, y_test
+
+
 def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val: pd.DataFrame,
                     y_val: pd.core.series.Series, learning_rate):
     """
@@ -100,7 +115,7 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     """
 
     perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500,
-                            acceptable_error=220)
+                            acceptable_error=200)
 
     perceptron.fit(x_train, y_train)
     y_predicted = list()
@@ -111,19 +126,19 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     return metrics.f1_score(y_val, y_predicted)
 
 
-def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
+def eval_learning_rate(x_train: pd.DataFrame, y_train: pd.core.series.Series,
+                       x_val: pd.DataFrame, y_val: pd.core.series.Series):
     """
     Trains different perceptron with the given data with different learning rate values.
-    :param x_values: pd.DataFrame with input values
-    :param y_values: pd.core.series.Series with labels (+1 or -1)
+    :param x_train:
+    :param y_train:
+    :param x_val:
+    :param y_val:
     :return:
     """
-    x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.2,
-                                                        random_state=0)  # train = 80%, test = 20%
-    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.25,
-                                                      random_state=1)  # train = 60%, val = 20%, test = 20%
+
     scores = list()
-    learning_rates = [0.000001, 1, 10, 50, 100, 500, 1000, 5000, 10000]
+    learning_rates = np.arange(0.00001, 0.1, 0.005)
 
     for learning_rate in learning_rates:  # from 10e-6 to 10e-4 with a step of
         scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))

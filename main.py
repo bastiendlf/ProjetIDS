@@ -1,7 +1,9 @@
 import pandas as pd
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
 from functions import eval_all_classifiers, plot_dataframe_columns, correlation_table, plot_scatter_matrix, \
-    remove_outliers, change_outliers_by_median, manual_cross_validation, eval_perceptron, eval_learning_rate
+    remove_outliers, change_outliers_by_median, manual_cross_validation, eval_perceptron, eval_learning_rate, \
+    split_train_validation_test_values
 
 if __name__ == "__main__":
     data = pd.read_csv('red_wines.csv')
@@ -24,7 +26,7 @@ if __name__ == "__main__":
     # plot_scatter_matrix(df_dict["remove_outliers"])
     # plot_scatter_matrix(df_dict["replace_outliers"])
 
-    # correlation1 = correlation_table(df_dict["remove_outliers"])
+    correlation1 = correlation_table(df_dict["remove_outliers"])
     # correlation2 = correlation_table(df_dict["replace_outliers"])
 
     # distribution of data in each class: good or bad
@@ -71,7 +73,7 @@ if __name__ == "__main__":
 
     # 3.3. Testing perceptron implementation with project data
 
-    # eval_perceptron(x_values=df_dict["replace_outliers"][feature_cols], y_values=df_dict["replace_outliers"].quality)
-    eval_learning_rate(x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)
+    x_train, y_train, x_val, y_val, x_test, y_test = split_train_validation_test_values(
+        x_values=df_dict["remove_center"][feature_cols], y_values=df_dict["remove_outliers"].quality)
 
-    print("coucou")
+    eval_learning_rate(x_train=x_train, y_train=y_train, x_val=x_val, y_val=y_val)
