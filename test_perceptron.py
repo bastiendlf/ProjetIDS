@@ -3,9 +3,17 @@ from perceptron import Perceptron
 import matplotlib.pyplot as plt
 
 
-def plot_values(x, y, eval, title):
+def plot_values(x, y, evaluation, title):
+    """
+    TODO Write documentation
+    :param x:
+    :param y:
+    :param evaluation:
+    :param title:
+    :return:
+    """
     for i in range(len(x)):
-        color = "blue" if eval[i] == 1 else "red"
+        color = "blue" if evaluation[i] == 1 else "red"
         plt.scatter(x[i], y[i], c=color, marker='o')
     plt.title(title)
     plt.show()
@@ -15,7 +23,6 @@ perceptron = Perceptron(nb_input=2, learning_rate=0.01, threshold=10)
 
 dict1 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
 list1 = [1, -1, -1, -1]
-
 
 x_train = pd.DataFrame(dict1)
 y_train = pd.Series(list1)
@@ -32,7 +39,6 @@ plot_values(dict1["A"], dict1["B"], list1, title="Visualization AND door")
 
 dict2 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
 list2 = [1, 1, 1, -1]
-
 
 x_train2 = pd.DataFrame(dict2)
 y_train2 = pd.Series(list2)

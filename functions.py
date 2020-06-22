@@ -81,10 +81,14 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
                     y_val: pd.core.series.Series, learning_rate):
     """
     TODO Write documentation
-    :param x_values:
-    :param y_values:
+    :param x_train:
+    :param y_train:
+    :param x_val:
+    :param y_val:
+    :param learning_rate:
     :return:
     """
+
     perceptron = Perceptron(x_train.shape[1], learning_rate=learning_rate, threshold=500)
 
     perceptron.fit(x_train, y_train)
@@ -102,20 +106,20 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
 def eval_learning_rate(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
     TODO Write documentation
-    :param data:
+    :param x_values:
+    :param y_values:
     :return:
     """
     x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.2,
                                                         random_state=0)  # train = 80%, test = 20%
     x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.25,
                                                       random_state=1)  # train = 60%, val = 20%, test = 20%
-
-    accuracies = list()
+    scores = list()
     learning_rates = list(
         [0.000001, 0.000500, 0.001000, 0.001500, 0.002000, 0.002500, 0.003000, 0.003500, 0.004000, 0.004500, 0.005000])
 
-    for accuracy in accuracies:  # from 10e-6 to 10e-4 with a step of
-        scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
+    for accuracy in learning_rates:  # from 10e-6 to 10e-4 with a step of
+        scores.append(eval_perceptron(x_train, y_train, x_val, y_val, accuracy))
 
     plt.scatter(learning_rates, scores, c='red', marker='o')
     plt.show()
@@ -182,7 +186,7 @@ def plot_dataframe_columns(df: pd.DataFrame):
     fig, axes = plt.subplots(2, 6)  # create figure and axes
 
     for index, element in enumerate(list(df.columns.values)[:-1]):
-        a = df.boxplot(column=element, ax=axes.flatten()[index])
+        df.boxplot(column=element, ax=axes.flatten()[index])
 
     fig.delaxes(axes[1, 5])
     plt.show()
