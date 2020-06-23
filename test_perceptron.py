@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     perceptron2.fit(x_train2, y_train2)
 
-    print("*****Testing perceptron for OR door*****")
+    print("*****Testing perceptron for OR gate*****")
     print("Input : Output")
     print('(1 1) ->', perceptron2.predict(pd.DataFrame({'A': [1], 'B': [1]})), ': excepted 1.')
     print('(1 0) ->', perceptron2.predict(pd.DataFrame({'A': [1], 'B': [0]})), ': excepted 1.')
