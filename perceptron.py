@@ -15,7 +15,7 @@ class Perceptron:
         :param acceptable_error: number of elements that can be misspredicted during learning
         """
         self.theta = np.random.rand(nb_x_column + 1)  # we add 1 line because of theta0
-        # self.theta = np.zeros(nb_x_column + 1) # funny when init theta with zeros
+        # self.theta = np.zeros(nb_x_column + 1) # funny results when init theta with zeros
         self.threshold = threshold  # max number of iteration
         self.learning_rate = learning_rate  # it represents Êta in the lesson
         self.acceptable_error = acceptable_error  # acceptable number of errors during learning
@@ -47,12 +47,10 @@ class Perceptron:
             elt_in_wrong_class = 0
 
             for x_values, y in zip(x_train.values, y_train):
-                # here we compute the number of elements predicted in the wrong class
+                # here we compute the number of elements currently predicted in the wrong class
                 prediction = self.predict(x_values)
                 if prediction != y:
                     elt_in_wrong_class += 1
-
-            # print(_, "iteration : errors left ->", elt_in_wrong_class)
 
             if elt_in_wrong_class < self.acceptable_error:
                 # if the algorithm can classify enough elements correctly we can stop the learning

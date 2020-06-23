@@ -100,14 +100,14 @@ def split_train_validation_test_values(x_values: pd.DataFrame, y_values: pd.core
     return x_train, y_train, x_val, y_val, x_test, y_test
 
 
-def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val: pd.DataFrame,
-                    y_val: pd.core.series.Series, learning_rate):
+def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_test: pd.DataFrame,
+                    y_test: pd.core.series.Series, learning_rate):
     """
     Trains a perceptron classifier and returns the score obtained with the given learning rate.
     :param x_train: pd.DataFrame that contains x values to train perceptron
     :param y_train: pd.core.series.Series that contains labels to train perceptron
-    :param x_val: pd.DataFrame that contains x values to determine which value of learning rate is the best
-    :param y_val: pd.core.series.Series that contains labels to determine which value of learning rate is the best
+    :param x_test: pd.DataFrame that contains x values to test perceptron
+    :param y_test: pd.core.series.Series that contains labels to test perceptron
     :param learning_rate: learning rate you want to test
     :return: score
     """
@@ -118,30 +118,31 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_val
     perceptron.fit(x_train, y_train)
     y_predicted = list()
 
-    for element in x_val.values:
+    for element in x_test.values:
         y_predicted.append(perceptron.predict(element))
-    print("Confusion Matrix:\n", metrics.confusion_matrix(y_val, y_predicted))
-    return metrics.f1_score(y_val, y_predicted)
+
+    return metrics.f1_score(y_test, y_predicted)
 
 
 def eval_learning_rate(x_train: pd.DataFrame, y_train: pd.core.series.Series,
                        x_val: pd.DataFrame, y_val: pd.core.series.Series):
     """
     Trains different perceptron with the given data with different learning rate values.
-    :param x_train:
-    :param y_train:
-    :param x_val:
-    :param y_val:
-    :return: learning rate with best score
+    :param x_train: pd.DataFrame that contains x values to train perceptron
+    :param y_train: pd.core.series.Series that contains labels to train perceptron
+    :param x_val: pd.DataFrame that contains x values to determine which value of learning rate is the best
+    :param y_val: pd.core.series.Series that contains labels to determine which value of learning rate is the best
+    :return: learning rate that make the perceptron get the best score
     """
 
     scores = list()
-    learning_rates = np.arange(0.00001, 0.1, 0.005)
+    learning_rates = np.linspace(start=0.00001, stop=0.1, num=20)
 
-    for learning_rate in learning_rates:  # from 10e-6 to 10e-4 with a step of
+    for learning_rate in learning_rates:
         scores.append(eval_perceptron(x_train, y_train, x_val, y_val, learning_rate))
 
-    plt.scatter(learning_rates, scores, c='red', marker='o')
+    plt.scatter(learning_rates, scores)
+    plt.plot(learning_rates, scores)
     plt.title("Evolution of the score according to the learning rate ")
     plt.xlabel('Learning rate')
     plt.ylabel('Score obtained')

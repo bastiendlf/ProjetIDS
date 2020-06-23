@@ -29,6 +29,15 @@ def plot_values(x, y, evaluation, title: str = "Title", separator=None):
 if __name__ == "__main__":
     perceptron = Perceptron(nb_x_column=2, learning_rate=0.01, threshold=100, acceptable_error=0)
 
+    """
+    First we try to make the perceptron learn the AND gate :
+    A B   output
+    1 1    1
+    1 0    0
+    0 1    0
+    0 0    0   
+    """
+
     dict1 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
     list1 = [1, -1, -1, -1]
 
@@ -37,13 +46,22 @@ if __name__ == "__main__":
 
     perceptron.fit(x_train, y_train)
 
-    print("*****Testing perceptron for AND door*****")
+    print("*****Testing perceptron for AND gate*****")
     print("Input : Output")
     print('(1 1) ->', perceptron.predict(pd.DataFrame({'A': [1], 'B': [1]})), ': excepted 1.')
     print('(1 0) ->', perceptron.predict(pd.DataFrame({'A': [1], 'B': [0]})), ': excepted -1.')
     print('(0 1) ->', perceptron.predict(pd.DataFrame({'A': [0], 'B': [1]})), ': excepted -1.')
     print('(0 0) ->', perceptron.predict(pd.DataFrame({'A': [0], 'B': [0]})), ': excepted -1.')
     plot_values(dict1["A"], dict1["B"], list1, title="Visualization AND door", separator=perceptron.get_equation_2D())
+
+    """
+    Then we try to make the perceptron learn the OR gate :
+    A B   output
+    1 1    1
+    1 0    1
+    0 1    1
+    0 0    0   
+    """
 
     dict2 = {'A': [1, 1, 0, 0], 'B': [1, 0, 1, 0]}
     list2 = [1, 1, 1, -1]
@@ -62,6 +80,10 @@ if __name__ == "__main__":
     print('(0 1) ->', perceptron2.predict(pd.DataFrame({'A': [0], 'B': [1]})), ': excepted 1.')
     print('(0 0) ->', perceptron2.predict(pd.DataFrame({'A': [0], 'B': [0]})), ': excepted -1.')
     plot_values(dict2["A"], dict2["B"], list2, title="Visualization OR door", separator=perceptron2.get_equation_2D())
+
+    """
+    Finally, we test the perceptron learn artificial linear separable values.
+    """
 
     x1 = [0.1, 0.2, 0.5, 0.75, 0.23, 0.45, 13, 10, 9, 12, 11, 10.5]
     x2 = [10, 11, 10.5, 13, 11.5, 12, 0.5, 1, 0.2, 0.3, 1.2, 0.33]
