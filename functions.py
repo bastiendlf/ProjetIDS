@@ -16,13 +16,14 @@ classifiers = [
     discriminant_analysis.LinearDiscriminantAnalysis(),
     discriminant_analysis.QuadraticDiscriminantAnalysis(),
     neighbors.KNeighborsClassifier(),
-    tree.DecisionTreeClassifier(max_depth=1000)
+    tree.DecisionTreeClassifier(max_depth=1000),
+    Perceptron(nb_x_column=len(columns) - 1, learning_rate=0.08, threshold=100, acceptable_error=220)
 ]
 
 
 def manual_cross_validation(x_values: pd.DataFrame, y_values: pd.core.series.Series):
     """
-    We manually implemented the cross_val_score function from sklearn to compare results.
+    We manually implemented the cross_val_score function from sklearn to compare results and test perceptron
     :param x_values: pd.DataFrame with input values
     :param y_values: pd.core.series.Series with labels (+1 or -1)
     :return: dictionary containing results
@@ -69,18 +70,18 @@ def eval_all_classifiers(x_values: pd.DataFrame, y_values: pd.core.series.Series
     x_train, x_test, y_train, y_test = train_test_split(x_values, y_values, test_size=0.25, random_state=0)
 
     for e in classifiers:
-        e.fit(x_train, y_train)
-        y_predicted = e.predict(x_test)
+        if e.__str__() != "Perceptron()":
+            e.fit(x_train, y_train)
+            y_predicted = e.predict(x_test)
+            scores_cross_validation = cross_val_score(e, x_values, y_values, cv=10)
 
-        scores_cross_validation = cross_val_score(e, x_values, y_values, cv=10)
-
-        print("\n*****************\n", e)
-        print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
-        print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
-        print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
-        print("Scores with cross-validation k-fold k=10", scores_cross_validation)
-        print("Mean score :", np.average(scores_cross_validation))
-        results[e.__str__()] = np.average(scores_cross_validation)
+            print("\n*****************\n", e)
+            print("Confusion Matrix:\n", metrics.confusion_matrix(y_test, y_predicted))
+            print("Accuracy:", metrics.accuracy_score(y_test, y_predicted))
+            print("Score without cross-validation:", metrics.f1_score(y_test, y_predicted))
+            print("Scores with cross-validation k-fold k=10", scores_cross_validation)
+            print("Mean score :", np.average(scores_cross_validation))
+            results[e.__str__()] = np.average(scores_cross_validation)
 
     return results
 
@@ -114,14 +115,8 @@ def eval_perceptron(x_train: pd.DataFrame, y_train: pd.core.series.Series, x_tes
 
     perceptron = Perceptron(nb_x_column=x_train.shape[1], learning_rate=learning_rate, threshold=500,
                             acceptable_error=200)
-
     perceptron.fit(x_train, y_train)
-    y_predicted = list()
-
-    for element in x_test.values:
-        y_predicted.append(perceptron.predict(element))
-
-    return metrics.f1_score(y_test, y_predicted)
+    return perceptron.score(x_test=x_test, y_test=y_test)
 
 
 def eval_learning_rate(x_train: pd.DataFrame, y_train: pd.core.series.Series,

@@ -54,7 +54,7 @@ if __name__ == "__main__":
         x_values=df_wines["replace_center"][feature_cols],
         y_values=df_wines["replace_outliers"].quality)
 
-    # here we want to compare results with our manual cross validation
+    # here we do it again with our custom function to compare with perceptron
     cross_validation_mean_scores["manual cross validation with remove center"] = manual_cross_validation(
         x_values=df_wines["replace_center"][feature_cols],
         y_values=df_wines["replace_outliers"].quality)
@@ -73,6 +73,7 @@ if __name__ == "__main__":
     df_results_comparison = pd.DataFrame(cross_validation_mean_scores)
 
     # 3.3. Testing perceptron implementation with project data
+    print("\n***************Training perceptron with centered and reduced values when removing outliers***************")
 
     """
      * x_train and y_train will contain data for training the perceptron (60%)
@@ -85,10 +86,11 @@ if __name__ == "__main__":
         x_values=df_wines["remove_center"][feature_cols], y_values=df_wines["remove_outliers"].quality)
 
     # Finding the best learning rate
+    print("Finding best learning rate please wait...")
     best_learning_rate = eval_learning_rate(x_train=x_train, y_train=y_train, x_val=x_val, y_val=y_val)
 
     # Testing the perceptron classifier on test values
-    print("\n***************Training perceptron with centered and reduced values when removing outliers***************")
+
     test_score = eval_perceptron(x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test,
                                  learning_rate=best_learning_rate)
     print("Best learning rate found:", best_learning_rate)
